@@ -24,20 +24,27 @@
       :width="width"
       :height="height"
       ref="resizableBox"
+      v-draggable="draggableOpt"
     >
       <div class="ly-dialog-body">
+        <div
+          class="ly-dialog-title-box"
+          ref="refHandle"
+          :style="titleStyle"
+          v-html="title"
+        ></div>
         <slot></slot>
       </div>
     </Resizable>
   </div>
 </template>
 <script>
-import CenterBox from "../centerbox";
 import Resizable from "../resizable";
 import MaskLayer from "../masklayer";
-
+import draggableMixin from "../mixins/draggable";
 export default {
-  components: { CenterBox, Resizable, MaskLayer },
+  components: { Resizable, MaskLayer },
+  mixins: [draggableMixin],
   props: {
     value: {
       type: Boolean,
@@ -63,6 +70,18 @@ export default {
     maskClosable: {
       type: Boolean,
       default: true
+    },
+    title:{
+      type:String,
+      default:'标题'
+    },
+    draggable:{
+      type:Boolean,
+      default:false
+    },
+    resizable:{
+      type:Boolean,
+      default:false
     }
   },
   data() {
@@ -71,7 +90,10 @@ export default {
       sTop: "auto",
       tagWidth: "auto",
       tagHeight: "auto",
-      showDlg: this.value
+      showDlg: this.value,
+      draggableOpt: {
+        handle: this.getRefHandle
+      }
     };
   },
   watch: {
@@ -91,6 +113,10 @@ export default {
         width: this.tagWidth,
         height: this.tagHeight
       };
+    },
+    titleStyle(){
+      console.log(this.draggable)
+      return this.draggable? {cursor:'move'}:null
     }
   },
   mounted() {
@@ -145,6 +171,9 @@ export default {
     },
     onMaskLayerClick() {
       this.close();
+    },
+    getRefHandle() {
+      return this.$refs.refHandle;
     }
   }
 };
@@ -163,6 +192,12 @@ export default {
   overflow: auto;
   height: 100%;
   width: 100%;
+}
+.ly-dialog-title-box {
+  height: 36px;
+  line-height: 36px;
+  padding-left: 8px;
+  background-color: white;
 }
 </style>
 

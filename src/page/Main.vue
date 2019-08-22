@@ -1,55 +1,29 @@
 <template>
-  <div>
-    <div class="header">
+  <LyLayout fit>
+    <LyLayoutPanel slot="left" width="200" style="background:#2f2f2f;">
       <div
         v-for="(item,index) in list"
         :key="index"
+        style="margin:5px;"
       >
-        <router-link :to="item.to">{{item.text}}</router-link>
+        <router-link :to="item.path">
+          <LyButton style="width:100%;">{{item.text}}</LyButton>
+        </router-link>
       </div>
-    </div>
-    <div class="content">
+    </LyLayoutPanel>
+    <LyLayoutPanel>
       <router-view></router-view>
-    </div>
-  </div>
+    </LyLayoutPanel>
+  </LyLayout>
 </template>
 <script>
+import { routes } from "@/router";
 export default {
   data() {
     return {
-      list: [
-        {
-          to: "/layout/base",
-          text: "base layout"
-        },
-        {
-          to: "/button",
-          text: "button"
-        },
-        {
-          to: "/dialog",
-          text: "dialog"
-        }
-      ]
+      list: routes
     };
   }
 };
 </script>
-<style scoped>
-.header {
-  position: absolute;
-  left: 0;
-  width: 200px;
-  background-color: skyblue;
-}
-.content {
-  position: absolute;
-  left: 200px;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #efedeb;
-}
-</style>
-
 

@@ -1,6 +1,6 @@
 <template>
-    <div :style="style">
-        <div class="ly-box">
+    <div class="ly-layoutpanel-wrap" :style="style">
+        <div class="ly-layoutpanel-box">
             <slot></slot>
         </div>
     </div>
@@ -23,7 +23,7 @@ export default {
 }
 </script>
 <style scoped>
-.ly-box{
+.ly-layoutpanel-box{
     width: 100%;
     height: 100%;
     overflow: auto;

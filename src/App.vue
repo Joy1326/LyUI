@@ -13,3 +13,7 @@ export default {
   }
 }
 </script>
+<style>
+@import url('./style/app.css');
+</style>
+

@@ -1,158 +1,168 @@
 <template>
   <div
-    v-if="dlgShow"
-    class="ly-dlg-mask"
-    @click.self="maskHandler"
+    class="ly-dialog-wrap"
+    v-show="showDlg"
   >
-    <div
-      class="ly-dlg-wrap"
-      :style="boxPosStyle"
-      ref="dlgBody"
-      v-resize
+    <MaskLayer
+      class="ly-dialog-masklayer-wrap"
+      :style="positionStyle"
+      :modal="modal"
+      :maskClosable="maskClosable"
+      @onMaskLayerClick="onMaskLayerClick"
     >
       <div
-        class="ly-dlg-header"
-        v-drag="{targetEl:getTargetEl}"
-        :style="headerStyle"
+        ref="dialogTag"
+        class="ly-dialog-tag"
+        :style="tagStyle"
       >
-        <slot>
-          <div class="ly-header-item">
-            header
-          </div>
-        </slot>
       </div>
-      <div class="ly-dlg-body" :style="bodyStyle">
-        body
+    </MaskLayer>
+    <Resizable
+      :left="sLeft"
+      :top="sTop"
+      :style="{...positionStyle}"
+      :width="width"
+      :height="height"
+      ref="resizableBox"
+    >
+      <div class="ly-dialog-body">
+        <slot></slot>
       </div>
-    </div>
+    </Resizable>
   </div>
 </template>
 <script>
-import dragMixins from "../mixins/drag";
-import resizeMixins from "../mixins/resize";
+import CenterBox from "../centerbox";
+import Resizable from "../resizable";
+import MaskLayer from "../masklayer";
+
 export default {
-  mixins: [dragMixins, resizeMixins],
+  components: { CenterBox, Resizable, MaskLayer },
   props: {
     value: {
       type: Boolean,
-      default: false
+      default: true
     },
-    headerHeight: {
-      type: Number,
-      default: 36
+    modal: {
+      type: Boolean,
+      default: true
+    },
+    scopePos: {
+      //absolute,fixed,relative
+      type: String,
+      default: "fixed"
+    },
+    width: {
+      type: [String],
+      default: "auto"
+    },
+    height: {
+      type: [String],
+      default: "auto"
+    },
+    maskClosable: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
-      dlgShow: this.value,
-      boxOffsetLeft: 0,
-      boxOffsetTop: 0,
-      targetEl: null,
-      subPos: {
-        left: 0,
-        top: 0
-      }
+      sLeft: "auto",
+      sTop: "auto",
+      tagWidth: "auto",
+      tagHeight: "auto",
+      showDlg: this.value
     };
   },
   watch: {
-    value(value) {
-      this.dlgShow = value;
-    },
-    dlgShow(value) {
-      this.$emit("input", this.dlgShow);
+    value(isShow) {
+      this.showDlg = isShow;
+      this.initOptFn();
     }
   },
   computed: {
-    boxPosStyle() {
-      if (this.boxOffsetLeft && this.boxOffsetTop) {
-        let { left, top } = this.subPos;
-        return {
-          left: this.boxOffsetLeft + left + "px",
-          top: this.boxOffsetTop + top + "px"
-        };
-      }
-    },
-    headerStyle() {
+    positionStyle() {
       return {
-        height: this.headerHeight + "px"
+        position: this.scopePos
       };
     },
-    bodyStyle(){
-        console.log(this.headerHeight)
-        return {
-            height:`calc(100% - ${this.headerHeight}px)`
-        }
+    tagStyle() {
+      return {
+        width: this.tagWidth,
+        height: this.tagHeight
+      };
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.setBoxOffsetLeftAndTop();
-    });
+    this.initOptFn();
   },
   methods: {
-    getTargetEl() {
-      return this.$refs.dlgBody;
+    getRefDialogTag() {
+      return this.$refs.dialogTag;
     },
-    setBoxOffsetLeftAndTop() {
+    getRefResizableBox() {
+      return this.$refs.resizableBox;
+    },
+    getTagOffset() {
+      let ref = this.getRefDialogTag();
+      return {
+        offsetLeft: ref.offsetLeft,
+        offsetTop: ref.offsetTop
+      };
+    },
+    getResizableBoxOffset() {
       try {
-        let { offsetLeft, offsetTop } = this.$refs.dlgBody;
-        this.boxOffsetLeft = offsetLeft;
-        this.boxOffsetTop = offsetTop;
-        this.resetSubPos();
+        let ref = this.getRefResizableBox().$el;
+        return {
+          offsetWidth: ref.offsetWidth,
+          offsetHeight: ref.offsetHeight
+        };
       } catch (error) {
         console.error(error);
       }
     },
-    resetSubPos() {
-      this.subPos.left = 0;
-      this.subPos.top = 0;
+    initOptFn() {
+      this.$nextTick(() => {
+        try {
+          let resizeBoxOffset = this.getResizableBoxOffset();
+
+          this.tagWidth = resizeBoxOffset.offsetWidth + "px";
+          this.tagHeight = resizeBoxOffset.offsetHeight + "px";
+
+          this.$nextTick(() => {
+            let offset = this.getTagOffset();
+            this.sLeft = offset.offsetLeft + "px";
+            this.sTop = offset.offsetTop + "px";
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      });
     },
-    maskHandler(e) {
-      this.dlgShow = false;
+    close() {
+      this.showDlg = false;
+      this.$emit("input", this.showDlg);
+    },
+    onMaskLayerClick() {
+      this.close();
     }
   }
 };
 </script>
 <style scoped>
-.ly-dlg-mask {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #6d6d6d75;
-  z-index: 999;
-  /* opacity:0.4; */
+.ly-dialog-wrap {
+  height: 0;
+  width: 0;
 }
-.ly-dlg-wrap {
-  border: 1px solid #cec7c7;
-  padding: 1px;
-  width: 400px;
-  height: 400px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border-radius: 4px;
-  background-color: #ffffff;
-  transform: translate(-50%, -50%);
-  cursor: e-resize;
-  box-sizing: border-box;
-  overflow: hidden;;
-}
-.ly-dlg-header {
+.ly-dialog-tag {
   position: relative;
-  cursor: move;
+  background-color: #d6d6d600;
+  z-index: -99;
 }
-.ly-header-item {
-  background: #e8e5e5;
-  padding: 5px;
+.ly-dialog-body {
+  overflow: auto;
   height: 100%;
-}
-.ly-dlg-body {
-  /* height: 100%; */
-  position: relative;
-  background-color: skyblue;
-  cursor: auto;
+  width: 100%;
 }
 </style>
 

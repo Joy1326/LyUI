@@ -42,7 +42,8 @@ export default {
   computed: {
     wrapStyle() {
       return {
-        height: this.fit ? "100%" : "auto"
+        height: this.fit ? "100%" : "auto",
+        overflow:this.fit?'hidden':'auto'
       };
     },
     contentWrapStyle() {
@@ -73,7 +74,6 @@ export default {
       return this.getRefFooter().offsetHeight;
     },
     initFn() {
-      console.log(this);
       this.wrapHeight = this.getWrapBoxHeight();
       this.headerHeight = this.getHeaderHeight();
       this.footerHeight = this.getFooterHeight();

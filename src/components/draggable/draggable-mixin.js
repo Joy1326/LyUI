@@ -1,12 +1,13 @@
 export default {
     directives: {
-        resize: {
+        draggable: {
             // 指令的定义
             inserted(el, bind) {
-
+                
             },
-            unbind(el) {
+            unbind(el, bind) {
+                
             }
         }
-    },
-};
+    }
+}

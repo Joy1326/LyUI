@@ -1,10 +1,10 @@
 <template>
   <LyLayout fit>
     <LyLayoutPanel>
-      <div style="background-color:#d6dad6;height:1000px;width:1000px;">center</div>
+      <div style="background-color:rgb(228, 228, 228);height:1000px;width:1000px;">center</div>
     </LyLayoutPanel>
     <LyLayoutPanel slot="header">
-      <div style="height:100px;background-color: #f3feff;">
+      <div style="height:100px;background-color: rgb(45, 90, 111);color:white;">
         header
       </div>
     </LyLayoutPanel>
@@ -21,7 +21,7 @@
       right
     </LyLayoutPanel>
     <LyLayoutPanel slot="footer">
-      <div style="background-color:#8a8a8a;height:50px;">
+      <div style="background-color: rgb(45, 90, 111);color:white;height:50px;">
         footer
       </div>
     </LyLayoutPanel>

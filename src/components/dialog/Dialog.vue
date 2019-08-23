@@ -71,17 +71,17 @@ export default {
       type: Boolean,
       default: true
     },
-    title:{
-      type:String,
-      default:'标题'
+    title: {
+      type: String,
+      default: "title"
     },
-    draggable:{
-      type:Boolean,
-      default:false
+    draggable: {
+      type: Boolean,
+      default: false
     },
-    resizable:{
-      type:Boolean,
-      default:false
+    resizable: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -114,9 +114,9 @@ export default {
         height: this.tagHeight
       };
     },
-    titleStyle(){
-      console.log(this.draggable)
-      return this.draggable? {cursor:'move'}:null
+    titleStyle() {
+      console.log(this.draggable);
+      return this.draggable ? { cursor: "move" } : null;
     }
   },
   mounted() {
@@ -197,7 +197,7 @@ export default {
   height: 36px;
   line-height: 36px;
   padding-left: 8px;
-  background-color: white;
+  background: linear-gradient(180deg, #f7f7f7, #c5c5c5b5);
 }
 </style>
 

@@ -1,7 +1,7 @@
 export default {
     directives: {
+        // 指令的定义
         draggable: {
-            // 指令的定义
             inserted(el, bind) {
                 let { onDragStart, onDrag, onDragEnd, handle } = bind.value && bind.value || {};
                 let disX = 0;
@@ -9,10 +9,16 @@ export default {
                 let sPageX = 0;
                 let sPageY = 0;
                 let nEl = el;
-                if (handle && typeof handle === 'function') {
-                    nEl = handle();
+                try {
+                    if (handle && typeof handle === 'function') {
+                        nEl = handle();
+                    }
+                    nEl.onmousedown = mousedownFn;
+                } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                 }
-                nEl.onmousedown = mousedownFn;
+
                 function mousedownFn(event) {
                     let { pageX, pageY } = event;
                     sPageX = pageX;
@@ -33,7 +39,7 @@ export default {
                         onDrag(event, {
                             disX, disY,
                             mX: pageX - sPageX,
-                            mY:pageY - sPageY
+                            mY: pageY - sPageY
                         });
                     }
                 }
@@ -46,10 +52,17 @@ export default {
                 }
             },
             unbind(el, bind) {
-                let { handle } = bind.value && bind.value || {};
-                el.onmousedown = null;
-                if (handle && typeof handle === 'function') {
-                    handle().onmousedown = null;
+                try {
+                    let { handle } = bind.value && bind.value || {};
+                    if (el.onmousedown) {
+                        el.onmousedown = null;
+                    }
+                    if (handle && typeof handle === 'function' && handle() && handle().onmousedown) {
+                        handle().onmousedown = null;
+                    }
+                } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(error);
                 }
             }
         }

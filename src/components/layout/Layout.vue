@@ -1,94 +1,63 @@
 <template>
-  <div
-    :style="wrapStyle"
-    ref="wrapBox"
-  >
-    <div ref="header">
-      <slot name="header"></slot>
+  <div class="ly-layout-wrap">
+    <div class="ly-layout-header ly-table-layout-row">
+      <div>
+        <slot name="header"></slot>
+      </div>
     </div>
-    <div
-      :style="contentWrapStyle"
-      class="ly-content-wrap"
-    >
-      <slot name="left"></slot>
-      <slot></slot>
-      <slot name="right"></slot>
+    <div class="ly-layout-body ly-table-layout-row">
+      <div class="ly-layout-center-wrap">
+        <div class="ly-layout-center">
+          <LCR>
+            <slot
+              slot="left"
+              name="left"
+            ></slot>
+            <slot></slot>
+            <slot
+              slot="right"
+              name="right"
+            ></slot>
+          </LCR>
+        </div>
+      </div>
     </div>
-    <div ref="footer">
-      <slot name="footer"></slot>
+    <div class="ly-layout-footer ly-table-layout-row">
+      <div>
+        <slot name="footer"></slot>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import LCR from "./LCR.vue";
 export default {
-  props: {
-    fit: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      wrapHeight: 0,
-      headerHeight: 0,
-      footerHeight: 0
-    };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initFn();
-    });
-  },
-  computed: {
-    wrapStyle() {
-      return {
-        height: this.fit ? "100%" : "auto",
-        overflow:this.fit?'hidden':'auto'
-      };
-    },
-    contentWrapStyle() {
-      return {
-        height: this.fit
-          ? this.wrapHeight - this.headerHeight - this.footerHeight + "px"
-          : "auto"
-      };
-    }
-  },
-  methods: {
-    getRefWrapBox() {
-      return this.$refs.wrapBox;
-    },
-    getWrapBoxHeight() {
-      return this.getRefWrapBox().offsetHeight;
-    },
-    getRefHeader() {
-      return this.$refs.header;
-    },
-    getHeaderHeight() {
-      return this.getRefHeader().offsetHeight;
-    },
-    getRefFooter() {
-      return this.$refs.footer;
-    },
-    getFooterHeight() {
-      return this.getRefFooter().offsetHeight;
-    },
-    initFn() {
-      this.wrapHeight = this.getWrapBoxHeight();
-      this.headerHeight = this.getHeaderHeight();
-      this.footerHeight = this.getFooterHeight();
-    }
-  }
+  components: { LCR }
 };
 </script>
+
 <style scoped>
-.ly-content-wrap {
+.ly-layout-wrap {
   display: table;
-  table-layout: fixed;
   width: 100%;
+  table-layout: fixed;
+  height: 100%;
+      background: linear-gradient(45deg, #00BCD4, transparent);
 }
-.ly-content-wrap > div {
+.ly-table-layout-row {
+  display: table-row;
+}
+.ly-layout-body {
+  height: 100%;
+}
+.ly-layout-center-wrap {
+  height: 100%;
+  overflow: hidden;
   display: table-cell;
+}
+.ly-layout-center {
+  height: 100%;
+  overflow: auto;
 }
 </style>
 

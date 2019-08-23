@@ -186,10 +186,10 @@ export default {
   position: absolute;
   /* height: 400px;
   width: 400px; */
-  background-color: #42b1bf;
+  background-color: white;
   border: 1px solid #795548;
   border-radius: 4px;
-  box-shadow: 2px 2px 5px #00bcd4;
+  box-shadow: 1px 1px 5px #ffffff;
   overflow: hidden;
 }
 </style>

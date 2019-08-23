@@ -52,7 +52,7 @@ export default {
 </script>
 <style scoped>
 .ly-masklayer-wrap {
-  background-color: #7979794a;
+  background-color: #7979799e;;
 }
 </style>
 

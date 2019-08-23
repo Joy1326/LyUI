@@ -2,7 +2,7 @@
     <div>
         <LyButton @click="openDlg">打开</LyButton>
         <LyDialog v-model="dlgShow" height="400px" width="600px" draggable>
-            <div style="background:#FFC107;">
+            <div style="background:#00BCD4;">
                 dialog
             </div>
         </LyDialog>

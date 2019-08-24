@@ -1,12 +1,12 @@
 <template>
     <div style="margin:40px;">
-        <LyResizable width="200px" height="100px">
+        <LyResizable style="border-color:#FF5722;width:300px;height:80px;">
             <div style="padding:10px;">
                 resize
             </div>
         </LyResizable>
-        <LyResizable height="50px" width="100px"  top="200px">
+        <!-- <LyResizable>
             resize2
-        </LyResizable>
+        </LyResizable> -->
     </div>
 </template>

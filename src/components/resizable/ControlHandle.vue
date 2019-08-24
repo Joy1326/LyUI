@@ -29,7 +29,7 @@ export default {
 
 <style scoped>
 .ly-corner-wrap {
-  border:1px solid #9e9e9e00;
+  border:2px solid #9e9e9e00;
   cursor: move;
   position: absolute;
 }

@@ -1,107 +1,26 @@
 <template>
   <div
-    ref="resizableWrap"
     class="ly-resizable-wrap"
-    :style="wrapStyle"
+    ref="resizableWrap"
   >
+    <ControlHandleBox
+      @mouseDown="mouseDown"
+      @mouseMoveLeftRight="mouseMoveLeftRight"
+      @mouseMoveTopBottom="mouseMoveTopBottom"
+      @mouseMoveRightLeft="mouseMoveRightLeft"
+      @mouseMoveBottomTop="mouseMoveBottomTop"
+      @mouseMoveTopLeft="mouseMoveTopLeft"
+      @mouseMoveTopRight="mouseMoveTopRight"
+      @mouseMoveBottomRight="mouseMoveBottomRight"
+      @mouseMoveBottomLeft="mouseMoveBottomLeft"
+    />
     <slot></slot>
-
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveLeftRight"
-      style="left:0;bottom:0;height:100%;cursor:ew-resize;"
-    />
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveTopBottom"
-      style="left:0;top:0;right:0;width:100%;cursor:ns-resize;"
-    />
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveRightLeft"
-      style="right:0;bottom:0;height:100%;cursor:ew-resize;"
-    />
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveBottomTop"
-      style="left:0;right:0;bottom:0;width:100%;cursor:ns-resize;"
-    />
-    <!-- 点 -->
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveTopLeft"
-      style="left:0;top:0;cursor:nwse-resize;"
-    />
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveTopRight"
-      style="right:0;top:0;cursor:nesw-resize;"
-    />
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveBottomRight"
-      style="right:0;bottom:0;cursor:nwse-resize;"
-    />
-    <Corner
-      @lyMouseDown="mouseDown"
-      @lyMouseMove="mouseMoveBottomLeft"
-      style="bottom:0;cursor:nesw-resize;"
-    />
-
   </div>
 </template>
 <script>
-import Corner from "./Corner.vue";
+import ControlHandleBox from "./ControlHandleBox.vue";
 export default {
-  props: {
-    width: {
-      type: [String],
-      default: "auto"
-    },
-    height: {
-      type: [String],
-      default: "auto"
-    },
-    left: {
-      type: [String],
-      default: "auto"
-    },
-    top: {
-      type: [String],
-      default: "auto"
-    },
-    right: {
-      type: [String],
-      default: "auto"
-    },
-    bottom: {
-      type: [String],
-      default: "auto"
-    }
-  },
-  components: {
-    Corner
-  },
-  watch:{
-    left(value){
-      this.wrapStyle.left=value;
-    },
-    top(value){
-      this.wrapStyle.top=value;
-    }
-  },
-  data() {
-    return {
-      wrapStyle: {
-        left: this.left,
-        top: this.top,
-        right: this.right,
-        bottom: this.bottom,
-        width: this.width,
-        height: this.height,
-      }
-    };
-  },
+  components: { ControlHandleBox },
   methods: {
     getRefWrap() {
       return this.$refs.resizableWrap;
@@ -118,63 +37,66 @@ export default {
     getWrapTop() {
       return this.getRefWrap().offsetTop;
     },
-    mouseDown(event) {
+    setWrapStyleAttr(attrName, value) {
+      this.getRefWrap().style[attrName] = value;
+    },
+    setWrapLeftAdd(moveX) {
+      this.setWrapStyleAttr("left", this.wrapLeft + moveX + "px");
+    },
+    setWrapTopAdd(moveY) {
+      this.setWrapStyleAttr("top", this.wrapTop + moveY + "px");
+    },
+    setWrapWidthAdd(moveX) {
+      this.setWrapStyleAttr("width", this.wrapWidth + moveX + "px");
+    },
+    setWrapWidthSubt(moveX) {
+      this.setWrapStyleAttr("width", this.wrapWidth - moveX + "px");
+    },
+    setWrapHeightAdd(moveY) {
+      this.setWrapStyleAttr("height", this.wrapHeight + moveY + "px");
+    },
+    setWrapHeightSubt(moveY) {
+      this.setWrapStyleAttr("height", this.wrapHeight - moveY + "px");
+    },
+    mouseDown() {
       this.wrapLeft = this.getWrapLeft();
       this.wrapTop = this.getWrapTop();
       this.wrapWidth = this.getWrapWidth();
       this.wrapHeight = this.getWrapHeight();
     },
-    setWrapLeftAdd(moveX) {
-      this.wrapStyle.left = this.wrapLeft + moveX + "px";
+    mouseMoveLeftRight({ moveX }) {
+      this.setWrapLeftAdd(moveX);
+      this.setWrapWidthSubt(moveX);
     },
-    setWrapTopAdd(moveY) {
-      this.wrapStyle.top = this.wrapTop + moveY + "px";
+    mouseMoveTopBottom({ moveY }) {
+      this.setWrapTopAdd(moveY);
+      this.setWrapHeightSubt(moveY);
     },
-    setWrapWidthAdd(moveX) {
-      this.wrapStyle.width = this.wrapWidth + moveX + "px";
+    mouseMoveRightLeft({ moveX }) {
+      this.setWrapWidthAdd(moveX);
     },
-    setWrapWidthSubt(moveX) {
-      this.wrapStyle.width = this.wrapWidth - moveX + "px";
+    mouseMoveBottomTop({ moveY }) {
+      this.setWrapHeightAdd(moveY);
     },
-    setWrapHeightAdd(moveY) {
-      this.wrapStyle.height = this.wrapHeight + moveY + "px";
-    },
-    setWrapHeightSubt(moveY) {
-      this.wrapStyle.height = this.wrapHeight - moveY + "px";
-    },
-    mouseMoveTopLeft(event, { moveX, moveY }) {
+    mouseMoveTopLeft({ moveX, moveY }) {
       this.setWrapLeftAdd(moveX);
       this.setWrapTopAdd(moveY);
 
       this.setWrapWidthSubt(moveX);
       this.setWrapHeightSubt(moveY);
     },
-    mouseMoveBottomRight(event, { moveX, moveY }) {
-      this.setWrapWidthAdd(moveX);
-      this.setWrapHeightAdd(moveY);
-    },
-    mouseMoveTopRight(event, { moveX, moveY }) {
+    mouseMoveTopRight({ moveX, moveY }) {
       this.setWrapTopAdd(moveY);
       this.setWrapWidthAdd(moveX);
       this.setWrapHeightSubt(moveY);
     },
-    mouseMoveBottomLeft(event, { moveX, moveY }) {
-      this.setWrapLeftAdd(moveX);
-      this.setWrapWidthSubt(moveX);
+    mouseMoveBottomRight({ moveX, moveY }) {
+      this.setWrapWidthAdd(moveX);
       this.setWrapHeightAdd(moveY);
     },
-    mouseMoveLeftRight(event, { moveX, moveY }) {
+    mouseMoveBottomLeft({ moveX, moveY }) {
       this.setWrapLeftAdd(moveX);
       this.setWrapWidthSubt(moveX);
-    },
-    mouseMoveTopBottom(event, { moveX, moveY }) {
-      this.setWrapTopAdd(moveY);
-      this.setWrapHeightSubt(moveY);
-    },
-    mouseMoveRightLeft(event, { moveX, moveY }) {
-      this.setWrapWidthAdd(moveX);
-    },
-    mouseMoveBottomTop(event, { moveX, moveY }) {
       this.setWrapHeightAdd(moveY);
     }
   }
@@ -184,13 +106,10 @@ export default {
 <style scoped>
 .ly-resizable-wrap {
   position: absolute;
-  /* height: 400px;
-  width: 400px; */
-  background-color: white;
-  border: 1px solid #795548;
+  border: 1px solid #dddede;
   border-radius: 4px;
-  box-shadow: 1px 1px 5px #ffffff;
-  overflow: hidden;
+  left: auto;
+  box-sizing: border-box;
 }
 </style>
 

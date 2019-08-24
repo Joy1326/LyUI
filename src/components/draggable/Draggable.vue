@@ -47,7 +47,7 @@ export default {
 </script>
 <style scoped>
 .ly-draggable-wrap {
-  position: absolute;
+  /* position: absolute; */
   border: 1px solid #90adb9;
   width: 100%;
   border-radius: 4px;

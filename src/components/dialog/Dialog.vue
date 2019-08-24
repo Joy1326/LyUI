@@ -18,11 +18,7 @@
       </div>
     </MaskLayer>
     <Resizable
-      :left="sLeft"
-      :top="sTop"
-      :style="{...positionStyle}"
-      :width="width"
-      :height="height"
+      :style="{...positionStyle,...resizableStyle}"
       ref="resizableBox"
       v-draggable="draggableOpt"
     >
@@ -33,7 +29,22 @@
           :style="titleStyle"
           v-html="title"
         ></div>
-        <slot></slot>
+        <div
+          class="ly-dialog-body-panel"
+          :style="bodyPanelStyle"
+        >
+          <slot></slot>
+        </div>
+        <div class="ly-dialog-footer">
+          <LyButton
+            @click="cancelHandler"
+            class="ly-dialog-cacel-btn ly-dialog-footer-btn"
+          >取消</LyButton>
+          <LyButton
+            @click="okHandler"
+            class="ly-dialog-ok-btn ly-dialog-footer-btn"
+          >确定</LyButton>
+        </div>
       </div>
     </Resizable>
   </div>
@@ -42,8 +53,9 @@
 import Resizable from "../resizable";
 import MaskLayer from "../masklayer";
 import draggableMixin from "../mixins/draggable";
+import LyButton from "../button";
 export default {
-  components: { Resizable, MaskLayer },
+  components: { Resizable, MaskLayer, LyButton },
   mixins: [draggableMixin],
   props: {
     value: {
@@ -115,8 +127,26 @@ export default {
       };
     },
     titleStyle() {
-      console.log(this.draggable);
-      return this.draggable ? { cursor: "move" } : null;
+      // this.draggable ? { cursor: "move" } : null;
+      return {
+        cursor: this.draggable ? "move" : "auto"
+      };
+    },
+    resizableStyle() {
+      return {
+        width: this.width,
+        height: this.height,
+        left: this.sLeft,
+        top: this.sTop
+      };
+    },
+    bodyPanelStyle() {
+      let headerHeight = 36;
+      let footerHeight = 42;
+      return {
+        height: `calc(100% - ${headerHeight + footerHeight}px)`,
+        background: "white"
+      };
     }
   },
   mounted() {
@@ -174,6 +204,14 @@ export default {
     },
     getRefHandle() {
       return this.$refs.refHandle;
+    },
+    cancelHandler() {
+      this.close();
+      this.$emit('cancelHandler');
+    },
+    okHandler() {
+      this.close();
+      this.$emit('okHandler');
     }
   }
 };
@@ -192,12 +230,29 @@ export default {
   overflow: auto;
   height: 100%;
   width: 100%;
+  background-color: white;
 }
 .ly-dialog-title-box {
   height: 36px;
   line-height: 36px;
   padding-left: 8px;
   background: linear-gradient(180deg, #f7f7f7, #c5c5c5b5);
+  border-bottom: 1px solid #e2e2e2;
+  box-sizing: border-box;
+}
+.ly-dialog-body-panel {
+  overflow: auto;
+}
+.ly-dialog-footer {
+  height: 42px;
+  background: #f1f1f1;
+  padding: 5px;
+  border-top: 1px solid #e2e2e2;
+  box-sizing: border-box;
+  text-align: right;
+}
+.ly-dialog-footer-btn {
+  margin: 0 5px;
 }
 </style>
 

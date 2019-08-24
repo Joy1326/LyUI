@@ -1,14 +1,26 @@
 <template>
-  <div class="ly-layout-wrap">
+  <div
+    class="ly-layout-wrap"
+    :style="fitStyle"
+  >
     <div class="ly-layout-header ly-table-layout-row">
       <div>
         <slot name="header"></slot>
       </div>
     </div>
-    <div class="ly-layout-body ly-table-layout-row">
-      <div class="ly-layout-center-wrap">
-        <div class="ly-layout-center">
-          <LCR>
+    <div
+      class="ly-layout-body ly-table-layout-row"
+      :style="fitStyle"
+    >
+      <div
+        class="ly-layout-center-wrap"
+        :style="fitStyle"
+      >
+        <div
+          class="ly-layout-center"
+          :style="fitStyle"
+        >
+          <LCR :fit="fit">
             <slot
               slot="left"
               name="left"
@@ -32,7 +44,20 @@
 <script>
 import LCR from "./LCR.vue";
 export default {
-  components: { LCR }
+  components: { LCR },
+  props: {
+    fit: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    fitStyle() {
+      return {
+        height: this.fit ? "100%" : "auto"
+      };
+    }
+  }
 };
 </script>
 
@@ -41,22 +66,16 @@ export default {
   display: table;
   width: 100%;
   table-layout: fixed;
-  height: 100%;
-      background: linear-gradient(45deg, #00BCD4, transparent);
+  background: linear-gradient(45deg, #00bcd4, transparent);
 }
 .ly-table-layout-row {
   display: table-row;
 }
-.ly-layout-body {
-  height: 100%;
-}
 .ly-layout-center-wrap {
-  height: 100%;
   overflow: hidden;
   display: table-cell;
 }
 .ly-layout-center {
-  height: 100%;
   overflow: auto;
 }
 </style>

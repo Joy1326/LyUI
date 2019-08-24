@@ -11,7 +11,7 @@ import CenterBox from '@/page/centerbox/CenterBox.vue';
 Vue.use(Router);
 const routes = [
     {
-        path: '/layout/base',
+        path: '/layout',
         component: BaseLayout,
         text:'Layout'
     }, {
@@ -34,12 +34,11 @@ const routes = [
         path: '/centerbox',
         component: CenterBox,
         text:'CenterBox'
+    }, {
+        path: '/table',
+        component: Table,
+        text:'Table'
     }
-    // , {
-    //     path: '/table',
-    //     component: Table,
-    //     text:'Table'
-    // }
 ];
 export { routes };
 const router = new Router({

@@ -68,7 +68,10 @@ export default {
         },
         {
           title: "C",
-          key: "C"
+          key: "C",
+          render: ( h,{ row }) => {
+            return h("div", row.C+'--');
+          }
         },
         {
           title: "D合并E,F",

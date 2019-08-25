@@ -5,6 +5,7 @@ import Draggable from './draggable';
 import Resizable from './resizable';
 import Table from './table';
 import CenterBox from './centerbox';
+import Tree from './tree';
 const LyUI = {
     install: function (Vue) {
         Vue.component('LyLayout', Layout);
@@ -16,6 +17,7 @@ const LyUI = {
         Vue.component('LyResizable', Resizable);
         Vue.component('LyTable', Table);
         Vue.component('LyCenterBox', CenterBox);
+        Vue.component('LyTree', Tree);
     }
 };
 export default LyUI;

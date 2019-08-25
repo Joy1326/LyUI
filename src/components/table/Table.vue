@@ -29,8 +29,21 @@
             :key="rowIndex"
             class="ly-table-tbody-tr"
           >
-            <td class="ly-table-td ly-table-cell" v-for="(col,colIndex) in allColumns" :key="colIndex">
-              {{row[col.key]}}
+            <td
+              class="ly-table-td ly-table-cell"
+              v-for="(col,colIndex) in allColumns"
+              :key="colIndex"
+            >
+              <div v-if="col.render">
+                <RenderCell
+                  :render="col.render"
+                  :row="row"
+                  :column="col"
+                ></RenderCell>
+              </div>
+              <div v-else>
+                {{getValue(row,col)}}
+              </div>
             </td>
           </tr>
         </tbody>
@@ -41,9 +54,12 @@
 <script>
 import LyLayout from "../layout";
 const LyLayoutPanel = LyLayout.Panel;
-import { transformColumnsToRows,transformAllColumns } from "./util";
+import { transformColumnsToRows, transformAllColumns } from "./util";
+import { typeOf } from "../utils/utils";
+import RenderCell from './RenderCell';
 export default {
-  components: { LyLayout, LyLayoutPanel },
+  name:'LyTable',
+  components: { LyLayout, LyLayoutPanel, RenderCell },
   props: {
     columns: {
       type: Array,
@@ -57,22 +73,30 @@ export default {
       type: Boolean,
       default: false
     },
-    showLastHeaderLine:{
-      type:Boolean,
-      default:true
+    showLastHeaderLine: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
-    let columnsRows = transformColumnsToRows(this.columns,this.showLastHeaderLine);
+    let columnsRows = transformColumnsToRows(
+      this.columns,
+      this.showLastHeaderLine
+    );
     let allColumns = transformAllColumns(this.columns);
     return {
       dataList: this.data,
       columnsRows: columnsRows,
-      allColumns:allColumns
+      allColumns: allColumns
     };
   },
   mounted() {
-    // console.log(this.data)
+  },
+  methods: {
+    getValue(row, col) {
+      let { key } = col;
+      return row[key];
+    }
   }
 };
 </script>

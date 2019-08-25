@@ -8,6 +8,7 @@ import Draggable from '@/page/draggable/Draggable.vue';
 import Resizable from '@/page/resizable/Resizable.vue';
 import Table from '@/page/table/Table.vue';
 import CenterBox from '@/page/centerbox/CenterBox.vue';
+import Tree from '@/page/tree/Tree.vue';
 Vue.use(Router);
 const routes = [
     {
@@ -38,6 +39,10 @@ const routes = [
         path: '/table',
         component: Table,
         text:'Table'
+    }, {
+        path: '/tree',
+        component: Tree,
+        text:'Tree'
     }
 ];
 export { routes };

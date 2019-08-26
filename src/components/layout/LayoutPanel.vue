@@ -7,6 +7,7 @@
 .ly-layoutpanel-box{
     height: 100%;
     overflow: auto;
+    box-sizing: border-box;
 }
 </style>
 

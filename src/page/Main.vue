@@ -11,7 +11,7 @@
         </router-link>
       </div>
     </LyLayoutPanel>
-    <LyLayoutPanel>
+    <LyLayoutPanel style="padding:10px;">
       <router-view></router-view>
     </LyLayoutPanel>
   </LyLayout>

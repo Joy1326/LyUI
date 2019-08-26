@@ -49,9 +49,11 @@ export default {
 .ly-draggable-wrap {
   /* position: absolute; */
   border: 1px solid #90adb9;
-  width: 100%;
+  display: inline-block;
+  /* width: 100%; */
   border-radius: 4px;
   z-index: 999;
+  overflow: auto;
 }
 </style>
 

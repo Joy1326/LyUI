@@ -3,7 +3,7 @@ export default {
         // 指令的定义
         draggable: {
             inserted(el, bind) {
-                let { onDragStart, onDrag, onDragEnd, handle,position="absolute" } = bind.value && bind.value || {};
+                let { onDragStart, onDrag, onDragEnd, handle,position="fixed" } = bind.value && bind.value || {};
                 let disX = 0;
                 let disY = 0;
                 let sPageX = 0;

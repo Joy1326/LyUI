@@ -52,7 +52,7 @@
 <script>
 import Resizable from "../resizable";
 import MaskLayer from "../masklayer";
-import draggableMixin from "../mixins/draggable";
+import draggableMixin from "../directives/draggable";
 import LyButton from "../button";
 export default {
   components: { Resizable, MaskLayer, LyButton },

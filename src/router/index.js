@@ -8,7 +8,10 @@ import Draggable from '@/page/draggable/Draggable.vue';
 import Resizable from '@/page/resizable/Resizable.vue';
 import Table from '@/page/table/Table.vue';
 import CenterBox from '@/page/centerbox/CenterBox.vue';
+import Input from '@/page/input/Input.vue';
+import Select from '@/page/select/Select.vue';
 import Tree from '@/page/tree/Tree.vue';
+import ComboTree from '@/page/combotree/ComboTree';
 Vue.use(Router);
 const routes = [
     {
@@ -40,9 +43,21 @@ const routes = [
         component: Table,
         text:'Table'
     }, {
+        path: '/input',
+        component: Input,
+        text:'Input'
+    }, {
+        path: '/select',
+        component: Select,
+        text:'Select'
+    },{
         path: '/tree',
         component: Tree,
         text:'Tree'
+    }, {
+        path: '/combo-tree',
+        component: ComboTree,
+        text:'ComboTree'
     }
 ];
 export { routes };

@@ -1,6 +1,8 @@
 <template>
   <div :class="isChild?'ly-tree-child ly-tree-wrap':'ly-tree-root ly-tree-wrap'">
+    <div class="ly-tree-empty" v-if="!data.length">没有数据！</div>
     <ul
+    v-else
       class="ly-tree-ul"
       style="padding:2px 5px;"
       :style="isChild?{marginLeft:'20px'}:{marginLeft:0}"
@@ -13,12 +15,12 @@
         <span :class="!treeNode.children?'ly-line':''"></span>
         <div
           class="ly-tree-name"
-          :style="!treeNode.children?'margin-left:12px;':''"
-          @click="changeStatus(nodeIndex,treeNode.children)"
+          :style="!treeNode.children?'margin-left:24px;':''"
         >
           <span
             class="ly-sp"
             v-if="treeNode.children"
+            @click="changeStatus(nodeIndex,treeNode.children)"
           >
             {{bindCk[nodeIndex]?'-':'+'}}
           </span>
@@ -39,7 +41,7 @@ export default {
   props: {
     data: {
       type: Array,
-      required: true
+      default:()=>[]
     },
     isChild: {
       type: Boolean,
@@ -73,11 +75,11 @@ export default {
 }
 .ly-line {
   height: 0;
-  display: inline-block;
-  width: 12px;
+  display: block;
+  width: 24px;
   border-top: 1px dashed #b9b9b9;
   position: relative;
-  top: 18px;
+  top: 12px;
   left: -2px;
 }
 .ly-sp {
@@ -95,33 +97,11 @@ export default {
 .ly-tree-child > .ly-tree-ul {
   border-left: 1px dashed #b9b9b9;
 }
-</style>
-<style scoped>
-/* .ly-tree-ul {
-  list-style: none;
+.ly-tree-empty{
+      text-align: center;
+    color: gray;
+    font-size: 14px;
 }
-.ly-tree-wrap {
-  display: inline-block;
-  box-sizing: border-box;
-}
-.ly-tree-name {
-}
-.ly-tree-child {
-  border-left: 1px dashed #b9b9b9;
-  padding: 6px;
-}
-.ly-sp {
-  display: inline-block;
-  border: 1px solid #b9b9b9;
-  height: 16px;
-  color: gray;
-  width: 16px;
-  line-height: 10px;
-  text-align: center;
-  cursor: pointer;
-  margin-left: -22px;
-  box-sizing: border-box;
-} */
 </style>
 
 

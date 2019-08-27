@@ -5,7 +5,10 @@ import Draggable from './draggable';
 import Resizable from './resizable';
 import Table from './table';
 import CenterBox from './centerbox';
+import Input from './input';
+import Select from './select';
 import Tree from './tree';
+import ComboTree from './combotree';
 const LyUI = {
     install: function (Vue) {
         Vue.component('LyLayout', Layout);
@@ -17,7 +20,12 @@ const LyUI = {
         Vue.component('LyResizable', Resizable);
         Vue.component('LyTable', Table);
         Vue.component('LyCenterBox', CenterBox);
+        Vue.component('LyInput', Input);
+        Vue.component('LySelect', Select);
+        Vue.component('LySelect.Option', Select.Option);
+        Vue.component('LyOption', Select.Option);
         Vue.component('LyTree', Tree);
+        Vue.component('LyComboTree', ComboTree);
     }
 };
 export default LyUI;

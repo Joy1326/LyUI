@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import draggableMixin from "../mixins/draggable";
+import draggableMixin from "../directives/draggable";
 export default {
   mixins: [draggableMixin],
   props: {

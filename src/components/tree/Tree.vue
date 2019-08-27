@@ -94,7 +94,7 @@ export default {
 .ly-tree-name {
   cursor: pointer;
 }
-.ly-tree-name:hover {
+.ly-tree-text:hover {
   background-color: aliceblue;
 }
 .ly-tree-text{

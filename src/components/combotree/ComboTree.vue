@@ -74,6 +74,7 @@ export default {
       this.textValue = name;
       this.treeValue = value;
       this.$emit("input", value);
+      this.showPanel=false;
     },
     getTextValue(value) {
       if(!value){

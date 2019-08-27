@@ -56,9 +56,9 @@ import LyLayout from "../layout";
 const LyLayoutPanel = LyLayout.Panel;
 import { transformColumnsToRows, transformAllColumns } from "./util";
 import { typeOf } from "../utils/utils";
-import RenderCell from './RenderCell';
+import RenderCell from "./RenderCell";
 export default {
-  name:'LyTable',
+  name: "LyTable",
   components: { LyLayout, LyLayoutPanel, RenderCell },
   props: {
     columns: {
@@ -90,8 +90,7 @@ export default {
       allColumns: allColumns
     };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     getValue(row, col) {
       let { key } = col;
@@ -108,6 +107,7 @@ export default {
   box-sizing: border-box;
   width: 100%;
   table-layout: fixed;
+  background-color: white;
 }
 .ly-table-th {
   background-color: #f8f8f9;
@@ -120,6 +120,9 @@ export default {
 }
 .ly-table-tbody-tr:hover {
   background-color: rgb(237, 247, 255);
+}
+.ly-table-cell {
+  padding: 4px;
 }
 </style>
 

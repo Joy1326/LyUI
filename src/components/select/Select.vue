@@ -4,7 +4,7 @@
       <Input
         @on-focus="onFocus"
         @on-blur="onBlur"
-        v-model="textValue"
+        v-model="textStr"
         ref="lyTextInput"
       />
     </div>
@@ -35,11 +35,20 @@ export default {
     return {
       showPanel: false,
       textValue: this.value,
-      isFocus:false
+      textStr: "",
+      isFocus: false
     };
+  },
+  watch: {
+    value(val) {
+      this.textValue = val;
+    }
   },
   mounted() {
     this.$on("on-select-selected", this.onOptionClick);
+    this.$nextTick(() => {
+      this.textStrFn();
+    });
   },
   methods: {
     getRefSelectPanel() {
@@ -47,20 +56,38 @@ export default {
     },
     onFocus() {
       this.showPanel = true;
-      this.isFocus=true;
+      this.isFocus = true;
     },
     onBlur() {
-      this.isFocus=false;
+      this.isFocus = false;
     },
     onOutsideClick() {
-        if(!this.isFocus){
-            this.showPanel = false;
-        }
+      if (!this.isFocus) {
+        this.showPanel = false;
+      }
     },
     onOptionClick({ value, text }) {
+      console.log(value, text);
       this.textValue = value;
+      this.textStr = text;
       this.$emit("input", value);
       this.showPanel = false;
+    },
+    textStrFn() {
+      this.textStr = this.getTextStr(this.value);
+    },
+    getTextStr(val) {
+      console.log(this);
+      // componentInstance
+      // componentOptions.tag==='"LyOption"'
+      // this.$slots.default
+      let slotsDefault = this.$slots.default;
+      for (let i = 0, slotLen = slotsDefault.length; i < slotLen; i++) {
+        let { value, optionText='' } = slotsDefault[i].componentInstance;
+        if (val === value) {
+          return optionText.toString().trim();
+        }
+      }
     }
   }
 };

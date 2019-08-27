@@ -10,23 +10,26 @@
           {{item.text}}
         </LyOption>
       </LySelect>
+      {{'value='+value}}
     </div>
-    <LySelect v-model="value">
+    <LySelect v-model="value2">
       <LyOption
-          v-for="(item,index) in data"
-          :key="index"
-          :value="item.value"
-        >
-          {{item.text}}
-        </LyOption>
+        v-for="(item,index) in data"
+        :key="index"
+        :value="item.value"
+      >
+        {{item.text}}
+      </LyOption>
     </LySelect>
+    {{'value2='+value2}}
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-        value:'2',
+      value: "2",
+      value2: "",
       data: [
         {
           value: "1",

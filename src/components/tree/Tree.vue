@@ -19,7 +19,6 @@
         <div
           class="ly-tree-name"
           :style="!treeNode.children?'margin-left:24px;':''"
-          
         >
           <span
             class="ly-sp"
@@ -28,7 +27,10 @@
           >
             {{bindCk[nodeIndex]?'-':'+'}}
           </span>
-          <span @click="nodeClick(treeNode)" class="ly-tree-text">{{treeNode.name}}</span>
+          <span
+            @click="nodeClick(treeNode)"
+            class="ly-tree-text"
+          >{{treeNode.name}}</span>
         </div>
         <LyTree
           v-if="bindCk[nodeIndex]"
@@ -43,7 +45,7 @@
 import Emitter from "../mixins/emitter";
 export default {
   name: "LyTree",
-  mixins:[Emitter],
+  mixins: [Emitter],
   props: {
     data: {
       type: Array,
@@ -97,7 +99,7 @@ export default {
 .ly-tree-text:hover {
   background-color: aliceblue;
 }
-.ly-tree-text{
+.ly-tree-text {
   white-space: nowrap;
 }
 .ly-sp {
@@ -106,7 +108,7 @@ export default {
   height: 16px;
   border-radius: 2px;
   line-height: 14px;
-  color: gray;
+  /* color: gray; */
   border: 1px solid #b9b9b9;
   text-align: center;
   vertical-align: top;
@@ -119,7 +121,7 @@ export default {
 }
 .ly-tree-empty {
   text-align: center;
-  color: gray;
+  /* color: gray; */
   font-size: 14px;
 }
 </style>

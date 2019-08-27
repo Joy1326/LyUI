@@ -1,8 +1,11 @@
 <template>
   <div :class="isChild?'ly-tree-child ly-tree-wrap':'ly-tree-root ly-tree-wrap'">
-    <div class="ly-tree-empty" v-if="!data.length">没有数据！</div>
+    <div
+      class="ly-tree-empty"
+      v-if="!data.length"
+    >没有数据！</div>
     <ul
-    v-else
+      v-else
       class="ly-tree-ul"
       style="padding:2px 5px;"
       :style="isChild?{marginLeft:'20px'}:{marginLeft:0}"
@@ -16,6 +19,7 @@
         <div
           class="ly-tree-name"
           :style="!treeNode.children?'margin-left:24px;':''"
+          
         >
           <span
             class="ly-sp"
@@ -24,7 +28,7 @@
           >
             {{bindCk[nodeIndex]?'-':'+'}}
           </span>
-          {{treeNode.name}}
+          <span @click="nodeClick(treeNode)" class="ly-tree-text">{{treeNode.name}}</span>
         </div>
         <LyTree
           v-if="bindCk[nodeIndex]"
@@ -36,12 +40,14 @@
   </div>
 </template>
 <script>
+import Emitter from "../mixins/emitter";
 export default {
   name: "LyTree",
+  mixins:[Emitter],
   props: {
     data: {
       type: Array,
-      default:()=>[]
+      default: () => []
     },
     isChild: {
       type: Boolean,
@@ -55,10 +61,12 @@ export default {
   },
   methods: {
     changeStatus(index, hasChild) {
-      console.log(this);
       if (hasChild) {
         this.$set(this.bindCk, index, !this.bindCk[index]);
       }
+    },
+    nodeClick(treeNode) {
+      this.dispatch("lyComboTree", "on-node-click", treeNode);
     }
   }
 };
@@ -69,6 +77,7 @@ export default {
   display: inline-block;
   padding: 5px;
   box-sizing: border-box;
+  color: #808080;
 }
 .ly-tree-ul {
   list-style: none;
@@ -82,6 +91,15 @@ export default {
   top: 12px;
   left: -2px;
 }
+.ly-tree-name {
+  cursor: pointer;
+}
+.ly-tree-name:hover {
+  background-color: aliceblue;
+}
+.ly-tree-text{
+  white-space: nowrap;
+}
 .ly-sp {
   display: inline-block;
   width: 16px;
@@ -91,16 +109,18 @@ export default {
   color: gray;
   border: 1px solid #b9b9b9;
   text-align: center;
-  vertical-align: middle;
+  vertical-align: top;
   cursor: pointer;
+  margin-right: 4px;
+  margin-top: 2px;
 }
 .ly-tree-child > .ly-tree-ul {
   border-left: 1px dashed #b9b9b9;
 }
-.ly-tree-empty{
-      text-align: center;
-    color: gray;
-    font-size: 14px;
+.ly-tree-empty {
+  text-align: center;
+  color: gray;
+  font-size: 14px;
 }
 </style>
 

@@ -8,12 +8,6 @@
         ref="lyTextInput"
       />
     </div>
-    <!-- <div class="ly-combotree-box">
-      <Tree
-        :style="{width:panelWidth+'px'}"
-        :data="data"
-      ></Tree>
-    </div> -->
     <SelectPanel
       v-show="showPanel"
       style="width:200px;"
@@ -22,6 +16,7 @@
       <slot>
         <Tree
           :data="data"
+          v-model="treeValue"
         ></Tree>
       </slot>
     </SelectPanel>
@@ -31,11 +26,11 @@
 import Input from "../input";
 import SelectPanel from "../selectpanel";
 import ClickOutside from "../directives/clickoutside";
-import Tree from '../tree';
+import Tree from "../tree";
 export default {
   name: "lyComboTree",
   mixins: [ClickOutside],
-  components: { Input, SelectPanel,Tree },
+  components: { Input, SelectPanel, Tree },
   props: {
     data: {
       type: Array,
@@ -44,14 +39,22 @@ export default {
     panelWidth: {
       type: [Number],
       default: 120
+    },
+    value:{
+      type:[String,Array,Number]
     }
   },
   data() {
     return {
       showPanel: false,
-      textValue: this.value,
+      textValue: this.getTextValue(this.value),
+      treeValue: this.value,
       isFocus: false
     };
+  },
+  watch: {},
+  mounted() {
+    this.$on("on-node-click", this.nodeClick);
   },
   methods: {
     onFocus() {
@@ -66,17 +69,46 @@ export default {
         this.showPanel = false;
       }
     },
-    onOptionClick({ value, text }) {
-      this.textValue = value;
+    nodeClick(node) {
+      let { value, name } = node;
+      this.textValue = name;
+      this.treeValue = value;
       this.$emit("input", value);
-      this.showPanel = false;
+    },
+    getTextValue(value) {
+      if(!value){
+        return '';
+      }
+      let data = this.data;
+      for (let i = 0, dataLen = data.length; i < dataLen; i++) {
+        let v=this.breadthFirst(value, data[i]);
+        if(v){
+          return v.name;
+        }
+      }
+    },
+    breadthFirst(value, root) {
+      let nodeDeque = [];
+      let node = root;
+      nodeDeque.push(node);
+      while (nodeDeque.length) {
+        node = nodeDeque.pop();
+        if(value ===node.value){
+          return node;
+        }
+        if (node.children) {
+          for (let ch of node.children) {
+            nodeDeque.push(ch);
+          }
+        }
+      }
     }
   }
 };
 </script>
 <style scoped>
 .ly-combotree-wrap {
-  width: 220px;
+  /* width: 220px; */
   display: inline-block;
   box-sizing: border-box;
 }

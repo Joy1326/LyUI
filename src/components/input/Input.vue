@@ -10,13 +10,14 @@
       v-bind="$attrs"
       :value="textValue"
       :disabled="disabled"
-      @input="oninput"
+      @input="oninputFn"
       @focus="onFocus"
       @blur="onBlur"
     />
   </div>
 </template>
 <script>
+import { debounce } from "lodash";
 export default {
   name: "LyInput",
   props: {
@@ -32,11 +33,12 @@ export default {
   data() {
     return {
       isFocus: false,
-      textValue:this.value
+      textValue: this.value,
+      oninputFn:debounce(this.oninput,80)
     };
   },
-  watch:{
-    value(val){
+  watch: {
+    value(val) {
       this.textValue = val;
     }
   },
@@ -48,17 +50,18 @@ export default {
       return this.$refs.inputWrap;
     },
     oninput(event) {
-      let value=event.target.value;
+      let value = event.target.value;
       this.textValue = value;
       this.$emit("input", value);
+
     },
     onFocus(event) {
       this.isFocus = true;
-      this.$emit('on-focus',event);
+      this.$emit("on-focus", event);
     },
     onBlur(event) {
       this.isFocus = false;
-      this.$emit('on-blur',event);
+      this.$emit("on-blur", event);
     }
   }
 };
@@ -70,9 +73,10 @@ export default {
   border-radius: 4px;
   box-sizing: border-box;
   overflow: hidden;
+  vertical-align: middle;
 }
 .ly-input {
-  width:  calc(100% - 2px);
+  width: calc(100% - 2px);
   height: 26px;
   text-indent: 4px;
   color: gray;

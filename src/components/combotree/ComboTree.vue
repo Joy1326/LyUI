@@ -14,12 +14,10 @@
       style="width:200px;"
       v-clickOutside="onOutsideClick"
     >
-      <slot>
-        <Tree
-          :data="treeData"
-          v-model="treeValue"
-        ></Tree>
-      </slot>
+      <Tree
+        :data="treeData"
+        v-model="treeValue"
+      ></Tree>
     </SelectPanel>
   </div>
 </template>
@@ -28,7 +26,8 @@ import Input from "../input";
 import SelectPanel from "../selectpanel";
 import ClickOutside from "../directives/clickoutside";
 import Tree from "../tree";
-import { deepCopy } from "../utils/utils";
+// import { deepCopy } from "../utils/utils";
+import { cloneDeep, debounce } from "lodash";
 export default {
   name: "lyComboTree",
   mixins: [ClickOutside],
@@ -44,6 +43,14 @@ export default {
     },
     value: {
       type: [String, Array, Number]
+    },
+    isLikeSearch: {
+      type: Boolean,
+      default: false
+    },
+    isLikeSearchAll: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -52,23 +59,28 @@ export default {
       textValue: this.getTextValue(this.value),
       treeValue: this.value,
       isFocus: false,
-      treeData:this.data
+      treeData: this.data
     };
   },
-  watch: {},
   mounted() {
     this.$on("on-node-click", this.nodeClick);
   },
   methods: {
+    resetTreeData(){
+      this.treeData = this.data;
+    },
     onFocus() {
       this.showPanel = true;
       this.isFocus = true;
+      this.resetTreeData();
     },
     onInput(value) {
       // console.log(value);
-      let isLikeSearch = true;
-      let isLikeSerchAll = true;
-      this.searchNode(value, isLikeSearch, isLikeSerchAll);
+      if (!value) {
+        this.resetTreeData();
+        return;
+      }
+      this.searchNode(value, this.isLikeSearch, this.isLikeSearchAll);
     },
     onBlur() {
       this.isFocus = false;
@@ -111,15 +123,15 @@ export default {
         );
       }
       // console.log(path);
-      this.toNewTree(path,newTree);
+      this.toNewTree(path, newTree);
       this.treeData = newTree;
     },
     copyData(data) {
-      return deepCopy(data);
+      return cloneDeep(data);
     },
-    toNewTree(path,newTree) {
+    toNewTree(path, newTree) {
       for (let i = 0, len = path.length; i < len; i++) {
-        let { finds, nodeMap,firseNodeValue } = path[i];
+        let { finds, nodeMap, firseNodeValue } = path[i];
         // this.toNewTree3(finds, nodeMap);
         this.toNewTree2(finds, nodeMap);
         newTree.push(nodeMap[firseNodeValue]);
@@ -161,7 +173,7 @@ export default {
             if (!nodeMap[pValue]._pv) {
               nodeMap[pValue]._pv = {};
             }
-            nodeMap[pValue]._pv[value]=true;
+            nodeMap[pValue]._pv[value] = true;
             nodeMap[pValue].children.push(tNode);
           }
         }
@@ -183,6 +195,7 @@ export default {
           if (node.value === value) {
             fNode = node;
             path[path.length - 1].finds.push(node);
+            path[path.length - 1].nodeMap[node.value]["_p"] = true;
             break;
           }
         } else {

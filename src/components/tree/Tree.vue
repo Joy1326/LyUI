@@ -2,7 +2,7 @@
   <div :class="isChild?'ly-tree-child ly-tree-wrap':'ly-tree-root ly-tree-wrap'">
     <div
       class="ly-tree-empty"
-      v-if="!data.length"
+      v-if="!isChild&&!data.length"
     >没有数据！</div>
     <ul
       v-else
@@ -15,17 +15,17 @@
         v-for="(treeNode,nodeIndex) in data"
         :key="nodeIndex"
       >
-        <span :class="!treeNode.children?'ly-line':''"></span>
+        <span :class="!(treeNode.children&&treeNode.children.length)?'ly-line':''"></span>
         <div
           class="ly-tree-name"
-          :style="!treeNode.children?'margin-left:24px;':''"
+          :style="!(treeNode.children&&treeNode.children.length)?'margin-left:24px;':''"
         >
           <span
             class="ly-sp"
-            v-if="treeNode.children"
-            @click="changeStatus(nodeIndex,treeNode.children)"
+            v-show="treeNode.children&&treeNode.children.length"
+            @click="changeStatus(nodeIndex)"
           >
-            {{bindCk[nodeIndex]?'-':'+'}}
+            {{!bindCk[nodeIndex]?'-':'+'}}
           </span>
           <span
             @click="nodeClick(treeNode)"
@@ -33,7 +33,7 @@
           >{{treeNode.name}}</span>
         </div>
         <LyTree
-          v-if="bindCk[nodeIndex]"
+          v-show="!bindCk[nodeIndex]&&treeNode.children"
           :isChild="true"
           :data="treeNode.children"
         ></LyTree>
@@ -62,10 +62,13 @@ export default {
     };
   },
   methods: {
-    changeStatus(index, hasChild) {
-      if (hasChild) {
-        this.$set(this.bindCk, index, !this.bindCk[index]);
-      }
+    // changeStatus(index, hasChild) {
+    //   if (hasChild) {
+    //     this.$set(this.bindCk, index, !this.bindCk[index]);
+    //   }
+    // },
+    changeStatus(index) {
+      this.$set(this.bindCk, index, !this.bindCk[index]);
     },
     nodeClick(treeNode) {
       this.dispatch("lyComboTree", "on-node-click", treeNode);

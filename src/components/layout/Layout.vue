@@ -42,7 +42,7 @@
   </div>
 </template>
 <script>
-import LCR from "./LCR.vue";
+import LCR from "../lcr";
 export default {
   components: { LCR },
   props: {

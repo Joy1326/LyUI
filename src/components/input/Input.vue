@@ -4,6 +4,7 @@
     :class="isFocus?'ly-input-focus':''"
     ref="inputWrap"
   >
+    <!-- <slot name="prefix-icon"></slot>
     <input
       class="ly-input"
       type="input"
@@ -14,12 +15,48 @@
       @focus="onFocus"
       @blur="onBlur"
     />
+    <slot name="icon">
+      <Icon v-if="icon" :type="icon"></Icon>
+    </slot> -->
+    <LCR>
+      <slot
+        slot="left"
+        name="prefix-icon"
+      >
+        <Icon
+          v-if="prefixIcon"
+          :type="prefixIcon"
+        ></Icon>
+      </slot>
+      <input
+        class="ly-input"
+        type="input"
+        v-bind="$attrs"
+        :value="textValue"
+        :disabled="disabled"
+        @input="oninputFn"
+        @focus="onFocus"
+        @blur="onBlur"
+      />
+      <slot
+        slot="right"
+        name="icon"
+      >
+        <Icon
+          v-if="icon"
+          :type="icon"
+        ></Icon>
+      </slot>
+    </LCR>
   </div>
 </template>
 <script>
 import { debounce } from "lodash";
+import Icon from "../icon";
+import LCR from "../tblcr";
 export default {
   name: "LyInput",
+  components: { Icon, LCR },
   props: {
     disabled: {
       type: Boolean,
@@ -28,13 +65,19 @@ export default {
     value: {
       type: [Number, String],
       default: ""
+    },
+    icon: {
+      type: String
+    },
+    "prefix-icon": {
+      type: String
     }
   },
   data() {
     return {
       isFocus: false,
       textValue: this.value,
-      oninputFn:debounce(this.oninput,80)
+      oninputFn: debounce(this.oninput, 80)
     };
   },
   watch: {
@@ -53,7 +96,6 @@ export default {
       let value = event.target.value;
       this.textValue = value;
       this.$emit("input", value);
-
     },
     onFocus(event) {
       this.isFocus = true;
@@ -74,6 +116,7 @@ export default {
   box-sizing: border-box;
   overflow: hidden;
   vertical-align: middle;
+  background-color: white;
 }
 .ly-input {
   width: calc(100% - 2px);

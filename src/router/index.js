@@ -12,6 +12,7 @@ import Input from '@/page/input/Input.vue';
 import Select from '@/page/select/Select.vue';
 import Tree from '@/page/tree/Tree.vue';
 import ComboTree from '@/page/combotree/ComboTree';
+import Icon from '@/page/icon/Icon.vue';
 Vue.use(Router);
 const routes = [
     {
@@ -58,6 +59,10 @@ const routes = [
         path: '/combo-tree',
         component: ComboTree,
         text:'ComboTree'
+    }, {
+        path: '/icon',
+        component: Icon,
+        text:'Icon'
     }
 ];
 export { routes };

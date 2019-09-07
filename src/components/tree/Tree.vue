@@ -15,7 +15,8 @@
         v-for="(treeNode,nodeIndex) in data"
         :key="nodeIndex"
       >
-        <span :class="!(treeNode.children&&treeNode.children.length)?'ly-line':''"></span>
+        <span :class="{'ly-line':showLine(treeNode)}"></span>
+        <!-- <span :class="(treeNode.children&&treeNode.children.length)?'ly-line':''"></span> -->
         <div
           class="ly-tree-name"
           :style="!(treeNode.children&&treeNode.children.length)?'margin-left:24px;':''"
@@ -62,6 +63,18 @@ export default {
     };
   },
   methods: {
+    showLine(node){
+      if(!this.isChild){
+        return false;
+      }
+      if(node.children&&node.children.length){
+        if(this.isChild){
+          return false;
+        }
+        return true;
+      }
+      return false;
+    },
     // changeStatus(index, hasChild) {
     //   if (hasChild) {
     //     this.$set(this.bindCk, index, !this.bindCk[index]);
@@ -119,7 +132,10 @@ export default {
   margin-right: 4px;
   margin-top: 2px;
 }
-.ly-tree-child > .ly-tree-ul {
+/* .ly-tree-child > .ly-tree-ul {
+  border-left: 1px dashed #b9b9b9;
+} */
+.ly-tree-li:not(:last-of-type) .ly-tree-ul{
   border-left: 1px dashed #b9b9b9;
 }
 .ly-tree-empty {
@@ -128,6 +144,7 @@ export default {
   font-size: 14px;
 }
 </style>
+
 
 
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="box">
     <div>
       <LySelect v-model="value">
         <LyOption
@@ -21,7 +21,7 @@
         {{item.text}}
       </LyOption>
     </LySelect>
-    {{'value2='+value2}}
+    {{'value='+value2}}
   </div>
 </template>
 <script>
@@ -44,4 +44,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+.box >div{
+  margin: 10px;
+}
+</style>
+
 

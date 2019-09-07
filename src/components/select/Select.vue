@@ -6,7 +6,12 @@
         @on-blur="onBlur"
         v-model="textStr"
         ref="lyTextInput"
-      />
+      >
+      <Icon
+        slot="icon"
+        :type="iconType"
+      ></Icon>
+      </Input>
     </div>
     <SelectPanel
       v-show="showPanel"
@@ -21,10 +26,11 @@
 import Input from "../input";
 import SelectPanel from "../selectpanel";
 import ClickOutside from "../directives/clickoutside";
+import Icon from "../icon";
 export default {
   name: "lySelect",
   mixins: [ClickOutside],
-  components: { Input, SelectPanel },
+  components: { Input, SelectPanel, Icon },
   props: {
     value: {
       type: [String, Array],
@@ -36,12 +42,22 @@ export default {
       showPanel: false,
       textValue: this.value,
       textStr: "",
-      isFocus: false
+      isFocus: false,
+      iconType: "icon-expand"
     };
   },
   watch: {
     value(val) {
       this.textValue = val;
+    },
+    showPanel(val) {
+      let iconType = "";
+      if (val) {
+        iconType = "icon-collapse";
+      } else {
+        iconType = "icon-expand";
+      }
+      this.iconType = iconType;
     }
   },
   mounted() {
@@ -67,7 +83,6 @@ export default {
       }
     },
     onOptionClick({ value, text }) {
-      console.log(value, text);
       this.textValue = value;
       this.textStr = text;
       this.$emit("input", value);
@@ -77,13 +92,12 @@ export default {
       this.textStr = this.getTextStr(this.value);
     },
     getTextStr(val) {
-      console.log(this);
       // componentInstance
       // componentOptions.tag==='"LyOption"'
       // this.$slots.default
       let slotsDefault = this.$slots.default;
       for (let i = 0, slotLen = slotsDefault.length; i < slotLen; i++) {
-        let { value, optionText='' } = slotsDefault[i].componentInstance;
+        let { value, optionText = "" } = slotsDefault[i].componentInstance;
         if (val === value) {
           return optionText.toString().trim();
         }

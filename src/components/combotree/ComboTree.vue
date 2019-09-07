@@ -7,7 +7,9 @@
         @input="onInput"
         v-model="textValue"
         ref="lyTextInput"
-      />
+      >
+      <Icon slot="icon" :type="iconType" />
+      </Input>
     </div>
     <SelectPanel
       v-show="showPanel"
@@ -26,12 +28,12 @@ import Input from "../input";
 import SelectPanel from "../selectpanel";
 import ClickOutside from "../directives/clickoutside";
 import Tree from "../tree";
-// import { deepCopy } from "../utils/utils";
+import Icon from '../icon';
 import { cloneDeep, debounce } from "lodash";
 export default {
   name: "lyComboTree",
   mixins: [ClickOutside],
-  components: { Input, SelectPanel, Tree },
+  components: { Input, SelectPanel, Tree ,Icon},
   props: {
     data: {
       type: Array,
@@ -43,6 +45,10 @@ export default {
     },
     value: {
       type: [String, Array, Number]
+    },
+    searchName:{
+      type:String,
+      default:'name'
     },
     isLikeSearch: {
       type: Boolean,
@@ -59,11 +65,23 @@ export default {
       textValue: this.getTextValue(this.value),
       treeValue: this.value,
       isFocus: false,
-      treeData: this.data
+      treeData: this.data,
+      iconType:'icon-expand'
     };
   },
   mounted() {
     this.$on("on-node-click", this.nodeClick);
+  },
+  watch:{
+    showPanel(val){
+      let iconType = "";
+      if (val) {
+        iconType = "icon-collapse";
+      } else {
+        iconType = "icon-expand";
+      }
+      this.iconType = iconType;
+    }
   },
   methods: {
     resetTreeData(){
@@ -192,14 +210,14 @@ export default {
         node = nodeDeque.pop();
         path[path.length - 1].nodeMap[node.value] = toChildrenNull(node);
         if (!isLikeSearch) {
-          if (node.value === value) {
+          if (node[this.searchName] === value) {
             fNode = node;
             path[path.length - 1].finds.push(node);
             path[path.length - 1].nodeMap[node.value]["_p"] = true;
             break;
           }
         } else {
-          if (node.value.trim().indexOf(value) > -1) {
+          if (node[this.searchName].trim().indexOf(value) > -1) {
             fNode = node;
             path[path.length - 1].finds.push(node);
             path[path.length - 1].nodeMap[node.value]["_p"] = true;

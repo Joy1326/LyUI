@@ -13,6 +13,7 @@ import Select from '@/page/select/Select.vue';
 import Tree from '@/page/tree/Tree.vue';
 import ComboTree from '@/page/combotree/ComboTree';
 import Icon from '@/page/icon/Icon.vue';
+import CheckBox from '@/page/checkbox/CheckBox.vue';
 Vue.use(Router);
 const routes = [
     {
@@ -63,6 +64,10 @@ const routes = [
         path: '/icon',
         component: Icon,
         text:'Icon'
+    }, {
+        path: '/checkbox',
+        component: CheckBox,
+        text:'CheckBox'
     }
 ];
 export { routes };

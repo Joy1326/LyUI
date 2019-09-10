@@ -11,6 +11,7 @@ import Select from './select';
 import Tree from './tree';
 import ComboTree from './combotree';
 import Icon from './icon';
+import CheckBox from './checkbox';
 const LyUI = {
     install: function (Vue) {
         Vue.component('LyLayout', Layout);
@@ -29,6 +30,7 @@ const LyUI = {
         Vue.component('LyTree', Tree);
         Vue.component('LyComboTree', ComboTree);
         Vue.component('LyIcon', Icon);
+        Vue.component('LyCheckBox', CheckBox);
     }
 };
 export default LyUI;

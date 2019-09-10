@@ -4,7 +4,7 @@
     class="ly-icon"
     aria-hidden="true"
   >
-    <use :xlink:href="'#'+type"></use>
+    <use v-bind="$attrs" :xlink:href="'#'+type"></use>
   </svg>
 </template>
 <script>

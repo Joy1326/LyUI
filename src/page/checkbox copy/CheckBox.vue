@@ -3,26 +3,27 @@
     <div>
       <div>独立复选框</div>
       <LyCheckBox v-model="value1">
-        苹果{{'value='+value1}}
+        苹果
       </LyCheckBox>
-      <LyCheckBox label="banana" v-model="value2" false-value="falseValue">
-        香蕉{{'value='+value2}}
-      </LyCheckBox>
-      <LyCheckBox label="banana" v-model="value2" disabled>
+      {{'value='+value1}}
+      <LyCheckBox v-model="value2" true-value="trueValue" false-value="falseValue">
         香蕉
       </LyCheckBox>
-
-      <LyCheckBox v-model="value3" true-value="trueValue">
-        香蕉1{{'value='+value3}}
+      {{'value='+value2}}
+      <LyCheckBox v-model="value2" disabled>
+        香蕉
       </LyCheckBox>
     </div>
     <div>
       <div>多个复选框</div>
-      <LyCheckBoxGroup v-model="values">
-        <LyCheckBox label="张三"></LyCheckBox>
-        <LyCheckBox label="李四"></LyCheckBox>
-        <LyCheckBox label="李五"></LyCheckBox>
-      </LyCheckBoxGroup>
+      <LyCheckBox
+        v-for="(item,index) in test"
+        :key="index"
+        :label="item"
+        v-model="values"
+      >
+        {{item}}
+      </LyCheckBox>
       <div>{{'values=['+values}}]</div>
     </div>
   </div>
@@ -33,7 +34,7 @@ export default {
     return {
       value1: true,
       value2:'',
-      value3:false,
+      test: ["测试", "张三"],
       values: ["张三"]
     };
   }

@@ -63,12 +63,12 @@ export default {
     };
   },
   methods: {
-    showLine(node){
-      if(!this.isChild){
+    showLine(node) {
+      if (!this.isChild) {
         return false;
       }
-      if(node.children&&node.children.length){
-        if(this.isChild){
+      if (node.children && node.children.length) {
+        if (this.isChild) {
           return false;
         }
         return true;
@@ -113,7 +113,8 @@ export default {
   cursor: pointer;
 }
 .ly-tree-text:hover {
-  background-color: aliceblue;
+  background-color: #c3c5c5;
+  color: #6a7073;
 }
 .ly-tree-text {
   white-space: nowrap;
@@ -135,7 +136,7 @@ export default {
 /* .ly-tree-child > .ly-tree-ul {
   border-left: 1px dashed #b9b9b9;
 } */
-.ly-tree-li:not(:last-of-type) .ly-tree-ul{
+.ly-tree-li:not(:last-of-type) .ly-tree-ul {
   border-left: 1px dashed #b9b9b9;
 }
 .ly-tree-empty {

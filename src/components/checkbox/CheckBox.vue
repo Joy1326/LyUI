@@ -1,26 +1,28 @@
 <template>
   <div class="ly-checkbox-wrap">
-    <label class="ly-ck-label">
+    <label
+      class="ly-ck-label"
+      :class="disabled?'ly-ck-disabled':'ly-ck-abled'"
+    >
       <span class="ly-ck-icon-box">
         <input
           class="ly-ck-input"
           type="checkbox"
           :disabled="disabled"
-          :checked="checked"
+          :checked="isChecked"
           :name="name"
           :value="label"
           :v-model="value"
           :id="inputId"
-          @click="onChange"
+          @change="onChange"
         >
         <Icon
-          fill="#2196F3"
-          :type="iconType"
+          :fill="fillColor"
+          :type="disabled?disabledIcon:(isChecked?checkedIcon:unCheckedIcon)"
         ></Icon>
       </span>
-      <slot>
-        <span>{{value}}</span>
-      </slot>
+      <slot></slot>
+      <span v-if="!$slots.default">{{label}}</span>
     </label>
   </div>
 </template>
@@ -28,10 +30,14 @@
 import Icon from "../icon";
 import { typeOf } from "../utils/utils";
 export default {
-  name: "LyCheckbox",
+  name: "LyCheckBox",
   components: { Icon },
+  inject: {
+    lyCheckBoxGroup: {
+      default: ""
+    }
+  },
   props: {
-    label: [Boolean, String, Number],
     value: {
       type: [Array, Boolean, String, Number],
       default: false
@@ -42,107 +48,109 @@ export default {
     },
     name: String,
     inputId: String,
-    trueValue: {
-      type: [Boolean, String, Number],
-      default: true
+    fillColor: {
+      type: String,
+      default: "#2196F3"
     },
-    falseValue: {
-      type: [Boolean, String, Number],
-      default: false
+    checkedIcon: {
+      type: String,
+      default: "icon-checked"
+    },
+    unCheckedIcon: {
+      type: String,
+      default: "icon-no-checked"
+    },
+    disabledIcon: {
+      type: String,
+      default: "icon-checked-disabled"
     }
   },
   data() {
-    return {
-      iconType: "icon-no-checked",
-      isGroup: this.isValueArray(),
-      checked: false
-    };
+    return {};
+  },
+  computed: {
+    hasLabel() {
+      return Boolean(this.$attrs.label);
+    },
+    label() {
+      return this.hasLabel ? this.$attrs.label : true;
+    },
+    hasTrueValue() {
+      return Boolean(this.$attrs["true-value"]);
+    },
+    hasFalseValue() {
+      return Boolean(this.$attrs["false-value"]);
+    },
+    trueValue() {
+      return this.hasTrueValue ? this.$attrs["true-value"] : true;
+    },
+    falseValue() {
+      return this.hasFalseValue ? this.$attrs["false-value"] : false;
+    },
+    isChecked() {
+      if (this.isGroup) {
+        return this.includes(this.model, this.label);
+      }
+      if (this.hasLabel) {
+        return this.label === this.model;
+      } else {
+        return this.trueValue === this.model;
+      }
+    },
+    isGroup() {
+      return this.lyCheckBoxGroup !== "";
+    },
+    model: {
+      get() {
+        return this.isGroup ? this.lyCheckBoxGroup.value : this.value;
+      },
+      set(val) {
+        this.isGroup
+          ? this.lyCheckBoxGroup.$emit("input", val)
+          : this.$emit("input", val);
+      }
+    }
   },
   mounted() {
     // console.log(this);
-    this.initIconType();
   },
   methods: {
-    getValue(value) {
-      return value;
-      // if(typeOf(value) === 'array'){
-      //   if(this.arrayIncludes(value,'测试')){
-      //     return '测试'
-      //   }
-      //   return value;
-      // }
+    onChange(e) {
+      let { checked, value } = e.target;
+      if (this.isGroup) {
+        this.setGroupValue(value, checked);
+      } else {
+        this.setSelfValue(value, checked);
+      }
+    },
+    setGroupValue(value, checked) {
+      this.model = checked
+        ? [...this.model, value]
+        : this.model.filter(item => item !== value);
+    },
+    setSelfValue(value, checked) {
+      if (this.hasLabel) {
+        this.model = checked
+          ? this.hasTrueValue
+            ? this.trueValue
+            : this.label
+          : this.hasFalseValue
+          ? this.falseValue
+          : typeOf(this.label) === "string"
+          ? ""
+          : false;
+        return;
+      }
+      this.model = checked
+        ? this.hasTrueValue
+          ? this.trueValue
+          : true
+        : this.hasFalseValue
+        ? this.falseValue
+        : false;
     },
     includes(values, targetValue) {
       return values.includes(targetValue);
-    },
-    groupValueChange(checked, value) {
-      if (checked) {
-        if (!this.includes(this.value, value)) {
-          this.$emit("input", [...this.value.map(item => item), value]);
-        }
-      } else {
-        this.$emit("input", this.value.filter(item => item !== value));
-      }
-    },
-    // booleanValueChange(checked) {
-    //   if(checked){
-    //     checked = this.trueValue;
-    //   }else{
-    //     checked = this.falseValue;
-    //   }
-    //   this.$emit("input", checked);
-    // },
-    isValueBoolean() {
-      return typeOf(this.value) === "boolean";
-    },
-    isValueArray() {
-      return typeOf(this.value) === "array";
-    },
-    onChange(e) {
-      let { checked, value } = e.target;
-      this.checked = checked;
-      this.setIconType(checked);
-      if (this.isGroup) {
-        this.groupValueChange(checked, value);
-      } else {
-        let ck = checked;
-        if (checked) {
-          ck = this.trueValue;
-        } else {
-          ck = this.falseValue;
-        }
-        this.$emit("input", ck);
-      }
-      // if (this.isValueBoolean()) {
-      //   this.booleanValueChange(checked);
-      // } else if (this.isGroup) {
-      //   this.arrayValueChange(checked, value);
-      // } else {
-      //   this.$emit("input", value);
-      // }
-    },
-    initIconType() {
-      if (this.isGroup) {
-        if (this.includes(this.value, this.label)) {
-          this.checked = true;
-        }
-      } else {
-        // if(this.isValueBoolean()&&this.value){
-        //   console.log(this.value)
-        //   this.checked = true;
-        // }
-        if (this.value && this.value === this.trueValue) {
-          this.checked = true;
-        }
-      }
-      this.setIconType(this.checked);
-    },
-    setIconType(checked) {
-      if (checked) {
-        this.iconType = "icon-checked";
-      } else {
-        this.iconType = "icon-no-checked";
-      }
     }
   }
 };
@@ -151,8 +159,13 @@ export default {
 .ly-checkbox-wrap {
   display: inline-block;
 }
-.ly-ck-label {
+.ly-ck-abled,
+.ly-ck-abled .ly-ck-input {
   cursor: pointer;
+}
+.ly-ck-disabled,
+.ly-ck-disabled .ly-ck-input {
+  cursor: not-allowed;
 }
 .ly-ck-input {
   position: absolute;
@@ -165,7 +178,6 @@ export default {
   padding: 0;
   margin: 0;
   opacity: 0;
-  cursor: pointer;
 }
 .ly-ck-icon-box {
   position: relative;

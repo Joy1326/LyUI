@@ -7,10 +7,13 @@
   </div>
 </template>
 <script>
-import Emitter from "../mixins/emitter";
 export default {
   name: "LySelectOption",
-  mixins: [Emitter],
+  inject: {
+    lySelect: {
+      default: ""
+    }
+  },
   props: {
     value: {
       type: [String, Number],
@@ -27,11 +30,13 @@ export default {
   },
   methods: {
     itemClick() {
-      let  text= this.optionText;
-      this.dispatch("lySelect", "on-select-selected", {
-        value: this.value,
-        text: text?text.trim():''
-      });
+      let text = this.optionText;
+      if (this.lySelect !== "") {
+        this.lySelect.$emit("on-selected", {
+          value: this.value,
+          text: text ? text.trim() : ""
+        });
+      }
     }
   }
 };

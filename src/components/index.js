@@ -15,6 +15,7 @@ import CheckBoxGroup from './checkboxgroup';
 import CheckBox from './checkbox';
 import RadioGroup from './radiogroup';
 import Radio from './radio';
+import Card from './card';
 const LyUI = {
     install: function (Vue) {
         let cName = 'Ly';
@@ -38,6 +39,7 @@ const LyUI = {
         Vue.component(cName + 'CheckBox', CheckBox);
         Vue.component(cName + 'RadioGroup', RadioGroup);
         Vue.component(cName + 'Radio', Radio);
+        Vue.component(cName + 'Card', Card);
     }
 };
 export default LyUI;

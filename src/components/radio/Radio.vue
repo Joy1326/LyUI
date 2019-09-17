@@ -82,9 +82,9 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log(this.isGroup);
-  },
+  // mounted() {
+  //   console.log(this.isGroup);
+  // },
   methods: {
     handleChange() {
       this.$nextTick(() => {

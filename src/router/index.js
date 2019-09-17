@@ -15,6 +15,7 @@ import ComboTree from '@/page/combotree/ComboTree';
 import Icon from '@/page/icon/Icon.vue';
 import CheckBox from '@/page/checkbox/CheckBox.vue';
 import Radio from '@/page/radio/Radio.vue';
+import Card from '@/page/card/Card.vue';
 Vue.use(Router);
 const routes = [
     {
@@ -73,6 +74,10 @@ const routes = [
         path: '/radio',
         component: Radio,
         text:'Radio'
+    }, {
+        path: '/card',
+        component: Card,
+        text:'Card'
     }
 ];
 export { routes };

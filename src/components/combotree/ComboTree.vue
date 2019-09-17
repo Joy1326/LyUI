@@ -34,6 +34,11 @@ export default {
   name: "lyComboTree",
   mixins: [ClickOutside],
   components: { Input, SelectPanel, Tree ,Icon},
+  provide(){
+    return {
+      lyComboTree:this
+    }
+  },
   props: {
     data: {
       type: Array,
@@ -70,7 +75,7 @@ export default {
     };
   },
   mounted() {
-    this.$on("on-node-click", this.nodeClick);
+    this.$on("on-node-selected", this.nodeClick);
   },
   watch:{
     showPanel(val){

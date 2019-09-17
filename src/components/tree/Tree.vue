@@ -43,10 +43,13 @@
   </div>
 </template>
 <script>
-import Emitter from "../mixins/emitter";
 export default {
   name: "LyTree",
-  mixins: [Emitter],
+  inject:{
+    lyComboTree:{
+      default:''
+    }
+  },
   props: {
     data: {
       type: Array,
@@ -75,16 +78,14 @@ export default {
       }
       return false;
     },
-    // changeStatus(index, hasChild) {
-    //   if (hasChild) {
-    //     this.$set(this.bindCk, index, !this.bindCk[index]);
-    //   }
-    // },
     changeStatus(index) {
       this.$set(this.bindCk, index, !this.bindCk[index]);
     },
     nodeClick(treeNode) {
-      this.dispatch("lyComboTree", "on-node-click", treeNode);
+      // this.dispatch("lyComboTree", "on-node-click", treeNode);
+      if(this.lyComboTree!==''){
+        this.lyComboTree.$emit('on-node-selected',treeNode);
+      }
     }
   }
 };

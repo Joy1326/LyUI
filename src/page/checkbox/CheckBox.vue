@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div>
+    <LyCard>
       <div>独立复选框</div>
       <LyCheckBox v-model="value1">
         苹果{{'value='+value1}}
@@ -15,8 +15,8 @@
       <LyCheckBox v-model="value3" true-value="trueValue">
         香蕉1{{'value='+value3}}
       </LyCheckBox>
-    </div>
-    <div>
+    </LyCard>
+    <LyCard>
       <div>多个复选框</div>
       <LyCheckBoxGroup v-model="values">
         <LyCheckBox label="张三"></LyCheckBox>
@@ -24,7 +24,7 @@
         <LyCheckBox label="李五"></LyCheckBox>
       </LyCheckBoxGroup>
       <div>{{'values=['+values}}]</div>
-    </div>
+    </LyCard>
   </div>
 </template>
 <script>
@@ -42,11 +42,7 @@ export default {
 <style scoped>
 .box > div {
   margin: 10px;
-  border: 1px solid #03a9f4;
-  border-radius: 5px;
   padding: 10px;
-  background: white;
-  box-shadow: 0px 0px 5px 2px #9e9e9e;
 }
 </style>
 

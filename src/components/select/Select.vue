@@ -31,6 +31,11 @@ export default {
   name: "lySelect",
   mixins: [ClickOutside],
   components: { Input, SelectPanel, Icon },
+  provide(){
+    return {
+      lySelect:this
+    }
+  },
   props: {
     value: {
       type: [String, Array],
@@ -61,7 +66,7 @@ export default {
     }
   },
   mounted() {
-    this.$on("on-select-selected", this.onOptionClick);
+    this.$on("on-selected", this.onOptionClick);
     this.$nextTick(() => {
       this.textStrFn();
     });
@@ -92,9 +97,6 @@ export default {
       this.textStr = this.getTextStr(this.value);
     },
     getTextStr(val) {
-      // componentInstance
-      // componentOptions.tag==='"LyOption"'
-      // this.$slots.default
       let slotsDefault = this.$slots.default;
       for (let i = 0, slotLen = slotsDefault.length; i < slotLen; i++) {
         let { value, optionText = "" } = slotsDefault[i].componentInstance;

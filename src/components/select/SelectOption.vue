@@ -28,6 +28,16 @@ export default {
       return this.text || (this.$el && this.$el.textContent);
     }
   },
+  mounted(){
+    this.$nextTick(()=>{
+      if(this.lySelect!==''){
+        this.lySelect.$emit('on-item-rendered',{
+          value:this.value,
+          text:this.optionText.trim()
+        })
+      }
+    });
+  },
   methods: {
     itemClick() {
       let text = this.optionText;

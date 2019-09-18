@@ -3,8 +3,12 @@
     v-if="type"
     class="ly-icon"
     aria-hidden="true"
+    @click="clickHandler"
   >
-    <use v-bind="$attrs" :xlink:href="'#'+type"></use>
+    <use
+      v-bind="$attrs"
+      :xlink:href="'#'+type"
+    ></use>
   </svg>
 </template>
 <script>
@@ -14,6 +18,11 @@ export default {
     type: {
       type: String,
       default: ""
+    }
+  },
+  methods: {
+    clickHandler(e) {
+      this.$emit("click", e);
     }
   }
 };

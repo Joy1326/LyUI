@@ -4,20 +4,6 @@
     :class="isFocus?'ly-input-focus':''"
     ref="inputWrap"
   >
-    <!-- <slot name="prefix-icon"></slot>
-    <input
-      class="ly-input"
-      type="input"
-      v-bind="$attrs"
-      :value="textValue"
-      :disabled="disabled"
-      @input="oninputFn"
-      @focus="onFocus"
-      @blur="onBlur"
-    />
-    <slot name="icon">
-      <Icon v-if="icon" :type="icon"></Icon>
-    </slot> -->
     <LCR>
       <slot
         slot="left"
@@ -30,6 +16,7 @@
       </slot>
       <input
         class="ly-input"
+        ref="refInput"
         type="input"
         v-bind="$attrs"
         :value="textValue"
@@ -45,6 +32,7 @@
         <Icon
           v-if="icon"
           :type="icon"
+          @click="iconClick"
         ></Icon>
       </slot>
     </LCR>
@@ -92,6 +80,9 @@ export default {
     getRefWrap() {
       return this.$refs.inputWrap;
     },
+    getRefInput(){
+      return this.$refs.refInput;
+    },
     oninput(event) {
       let value = event.target.value;
       this.textValue = value;
@@ -104,6 +95,12 @@ export default {
     onBlur(event) {
       this.isFocus = false;
       this.$emit("on-blur", event);
+    },
+    iconClick(){
+      console.log(3)
+    },
+    focus(){
+      this.getRefInput().focus();
     }
   }
 };

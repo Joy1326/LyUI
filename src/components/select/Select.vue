@@ -9,14 +9,15 @@
       >
       <Icon
         slot="icon"
-        :type="iconType"
+        :type="showPanel?iconUp:iconDown"
+        @click="iconClick"
       ></Icon>
       </Input>
     </div>
     <SelectPanel
       v-show="showPanel"
-      style="height:200px;width:200px;"
       v-clickOutside="onOutsideClick"
+      :style="cPanelStyle"
     >
       <slot></slot>
     </SelectPanel>
@@ -31,47 +32,64 @@ export default {
   name: "lySelect",
   mixins: [ClickOutside],
   components: { Input, SelectPanel, Icon },
-  provide(){
+  provide() {
     return {
-      lySelect:this
-    }
+      lySelect: this
+    };
   },
   props: {
     value: {
       type: [String, Array],
       required: true
-    }
+    },
+    iconUp:{
+      type:String,
+      default:'icon-expand'
+    },
+    iconDown:{
+      type:String,
+      default:'icon-collapse'
+    },
+    panelWidth:{
+      type:String,
+      default:'200px'
+    },
+    panelHeight:{
+      type:String,
+      default:'200px'
+    },
+    panelStyle:Object
   },
   data() {
     return {
       showPanel: false,
       textValue: this.value,
       textStr: "",
-      isFocus: false,
-      iconType: "icon-expand"
+      isFocus: false
     };
   },
   watch: {
     value(val) {
       this.textValue = val;
-    },
-    showPanel(val) {
-      let iconType = "";
-      if (val) {
-        iconType = "icon-collapse";
-      } else {
-        iconType = "icon-expand";
+    }
+  },
+  computed:{
+    cPanelStyle(){
+      return {
+        width:this.panelWidth,
+        height:this.panelHeight,
+        ...this.panelStyle
       }
-      this.iconType = iconType;
     }
   },
   mounted() {
     this.$on("on-selected", this.onOptionClick);
-    this.$nextTick(() => {
-      this.textStrFn();
-    });
+    this.$on('on-item-rendered',this.itemRendered);
   },
   methods: {
+    getRefInput() {
+      return this.$refs.lyTextInput;
+    },
     getRefSelectPanel() {
       return this.$refs.selectPanel;
     },
@@ -93,17 +111,18 @@ export default {
       this.$emit("input", value);
       this.showPanel = false;
     },
-    textStrFn() {
-      this.textStr = this.getTextStr(this.value);
-    },
-    getTextStr(val) {
-      let slotsDefault = this.$slots.default;
-      for (let i = 0, slotLen = slotsDefault.length; i < slotLen; i++) {
-        let { value, optionText = "" } = slotsDefault[i].componentInstance;
-        if (val === value) {
-          return optionText.toString().trim();
-        }
+    itemRendered(item){
+      let {value,text} = item;
+      if(value === this.value){
+        this.textStr = text;
       }
+    },
+    iconClick(e) {
+      if (!this.showPanel) {
+        this.getRefInput().focus();
+        return;
+      }
+      this.showPanel != this.showPanel;
     }
   }
 };

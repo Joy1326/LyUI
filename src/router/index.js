@@ -16,6 +16,8 @@ import Icon from '@/page/icon/Icon.vue';
 import CheckBox from '@/page/checkbox/CheckBox.vue';
 import Radio from '@/page/radio/Radio.vue';
 import Card from '@/page/card/Card.vue';
+import DateBox from '@/page/datebox/DateBox.vue';
+import Row from '@/page/row/Row.vue';
 Vue.use(Router);
 const routes = [
     {
@@ -78,6 +80,14 @@ const routes = [
         path: '/card',
         component: Card,
         text:'Card'
+    }, {
+        path: '/datebox',
+        component: DateBox,
+        text:'DateBox'
+    }, {
+        path: '/row',
+        component: Row,
+        text:'Row'
     }
 ];
 export { routes };

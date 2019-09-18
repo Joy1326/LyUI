@@ -3,6 +3,7 @@
     class="ly-button"
     v-bind="disabledProp"
     @click="clickHandler"
+    :style="btnStyle"
   >
     <slot></slot>
   </button>
@@ -13,10 +14,13 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    size: {
+      type: String,
+      default: "normal"
     }
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     disabledProp() {
       if (!this.disabled) {
@@ -25,6 +29,19 @@ export default {
       return {
         disabled: "disabled"
       };
+    },
+    btnStyle() {
+      if (this.size === "normal") {
+        return null;
+      }
+      if (this.size === "small") {
+        return {
+          width: "44px",
+          height: "24px",
+          lineHeight: "24px",
+          fontSize: "12px"
+        };
+      }
     }
   },
   methods: {
